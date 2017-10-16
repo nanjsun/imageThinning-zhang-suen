@@ -22,7 +22,7 @@ def zhangSuen(image):
     while changing1 or changing2:
         counter = counter + 1
         
-        if counter > 3:
+        if counter > 20:
             break
         # Step 1
         changing1 = []
@@ -57,21 +57,37 @@ def zhangSuen(image):
         #print changing2
     return image
 
+
+
+
 img = cv2.imread('2.jpg', 0)
 
 print(img)
 
-ret, thresh = cv2.threshold(img, 127, 1, cv2.THRESH_BINARY)
+ret, thresh = cv2.threshold(img, 127, 1, cv2.THRESH_BINARY_INV)
 print(ret,'------>')
 
-print(thresh, '------------')
+print(thresh, '------------>')
 
 print(thresh)
 
 image = zhangSuen(thresh)
 
+print(image)
+
+#ret1, res = cv2.threshold(image, 255, 1, cv2.THRESH_BINARY_INV)
+
+res = image.copy()
+for y in range(1, len(image) - 1):
+	for x in range(1, len(image[0]) - 1):
+		if image[y][x] == 1:
+			res[y][x] = 0
+		else:
+			res[y][x] =1
+
+
 cv2.imshow('dst', image*255)
 
-cv2.imwrite('4-10a.jpg', image*255)
+cv2.imwrite('4-10a.jpg', res*255)
 
 cv2.imwrite('4-10b.jpg', image*255)
