@@ -2,74 +2,6 @@
 import cv2
 import time
 
-# Example from [http://nayefreza.wordpress.com/2013/05/11/zhang-suen-thinning-algorithm-java-implementation/ this blog post].
-beforeTxt = '''\
-1100111
-1100111
-1100111
-1100111
-1100110
-1100110
-1100110
-1100110
-1100110
-1100110
-1100110
-1100110
-1111110
-0000000\
-'''
-
-# Thanks to [http://www.network-science.de/ascii/ this site] and vim for these next two examples
-smallrc01 = '''\
-00000000000000000000000000000000
-01111111110000000111111110000000
-01110001111000001111001111000000
-01110000111000001110000111000000
-01110001111000001110000000000000
-01111111110000001110000000000000
-01110111100000001110000111000000
-01110011110011101111001111011100
-01110001111011100111111110011100
-00000000000000000000000000000000\
-'''
-
-rc01 = '''\
-00000000000000000000000000000000000000000000000000000000000
-01111111111111111100000000000000000001111111111111000000000
-01111111111111111110000000000000001111111111111111000000000
-01111111111111111111000000000000111111111111111111000000000
-01111111100000111111100000000001111111111111111111000000000
-00011111100000111111100000000011111110000000111111000000000
-00011111100000111111100000000111111100000000000000000000000
-00011111111111111111000000000111111100000000000000000000000
-00011111111111111110000000000111111100000000000000000000000
-00011111111111111111000000000111111100000000000000000000000
-00011111100000111111100000000111111100000000000000000000000
-00011111100000111111100000000111111100000000000000000000000
-00011111100000111111100000000011111110000000111111000000000
-01111111100000111111100000000001111111111111111111000000000
-01111111100000111111101111110000111111111111111111011111100
-01111111100000111111101111110000001111111111111111011111100
-01111111100000111111101111110000000001111111111111011111100
-00000000000000000000000000000000000000000000000000000000000\
-'''
-
-#def intarray(binstring):
-#    '''Change a 2D matrix of 01 chars into a list of lists of ints'''
-#    return [[1 if ch == '1' else 0 for ch in line] 
-#            for line in binstring.strip().split()]
-
-
-
-def chararray(intmatrix):
-    '''Change a 2d list of lists of 1/0 ints into lines of 1/0 chars'''
-    return '\n'.join(''.join(str(p) for p in row) for row in intmatrix)
-
-def toTxt(intmatrix):
-    '''Change a 2d list of lists of 1/0 ints into lines of '#' and '.' chars'''
-    return '\n'.join(''.join(('#' if p else '.') for p in row) for row in intmatrix)
-
 def neighbours(x, y, image):
     '''Return 8-neighbours of point p1 of picture, in order'''
     i = image
@@ -124,49 +56,22 @@ def zhangSuen(image):
         #print changing1
         #print changing2
     return image
-            
-''' 
-if __name__ == '__main__':
-    for picture in (beforeTxt, smallrc01, rc01):
-        image = intarray(picture)
-        print('\nFrom:\n%s' % toTxt(image))
-        after = zhangSuen(image)
-        print('\nTo thinned:\n%s' % toTxt(after))
-'''
 
 img = cv2.imread('2.jpg', 0)
 
 print(img)
 
-
-#ret, thresh = cv2.threshold(cv2.cvtColor(img.copy(), cv2.COLOR_BGR2GRAY) , 127, 1, cv2.THRESH_BINARY_INV)
-ret, thresh = cv2.threshold(img, 127, 1, cv2.THRESH_BINARY_INV)
+ret, thresh = cv2.threshold(img, 127, 1, cv2.THRESH_BINARY)
 print(ret,'------>')
 
+print(thresh, '------------')
 
 print(thresh)
 
-
-#cv2.imwrite('2-1.jpg', img)
-cv2.namedWindow('src')
-cv2.imshow('src',thresh)
-
-time.sleep(100)
-
-print(img)
-
-#intarray= intarray(thresh)
-
-print('------------')
-
-
-print(thresh)
-#print(intarray)
 image = zhangSuen(thresh)
-cv2.namedWindow('dst')
 
 cv2.imshow('dst', image*255)
 
-time.sleep(10)
+cv2.imwrite('4-10a.jpg', image*255)
 
-cv2.imwrite('4-2.jpg', image*255)
+cv2.imwrite('4-10b.jpg', image*255)
